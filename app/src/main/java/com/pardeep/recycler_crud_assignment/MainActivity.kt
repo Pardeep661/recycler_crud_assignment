@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity(), RecyclerInterface {
     var data = arrayListOf<MyData>()
     var recycAdapter = MyAdapter(this,data,this)
     lateinit var linearLayoutManager: LinearLayoutManager
+    lateinit var todoDataBase: TodoDataBase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity(), RecyclerInterface {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        todoDataBase = TodoDataBase.getInstance(this)
         binding?.fab?.setOnClickListener {
             Dialog(this).apply {
                 setContentView(R.layout.custom_dialog)
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity(), RecyclerInterface {
                         text2.error = "enter description"
                     }else
                     {
+                        todoDataBase.todoInterface().insertTodo()
                         data.add(MyData(text1.text.toString(),text2.text.toString()))
                         recycAdapter.notifyDataSetChanged()
                         dismiss()
