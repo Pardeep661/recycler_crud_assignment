@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), RecyclerInterface {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        dataBase = DBHandler.getDB(this)
+        dataBase = DataBase.getInstance(this)
 
         binding?.fab?.setOnClickListener {
             Dialog(this).apply {
@@ -49,8 +49,9 @@ class MainActivity : AppCompatActivity(), RecyclerInterface {
                         text2.error = "enter description"
                     }else
                     {
-                        dataBase.dataDao.insertData(MyData(title = text1.text.toString(), description = text2.text.toString()))
-                        println(dataBase.dataDao.getAllData())
+                        dataBase.dataDao().insertData(MyData(
+                            title = text1.text.toString(),
+                            description = text2.text.toString()))
                         data.add(MyData(text1.text.toString(),text2.text.toString()))
                         recycAdapter.notifyDataSetChanged()
                         dismiss()
@@ -92,11 +93,15 @@ class MainActivity : AppCompatActivity(), RecyclerInterface {
                }else
                {
                    //data.set(position,MyData(text1.text.toString(),text2.text.toString()))
-                   //recycAdapter.notifyDataSetChanged()
+                   //recyclerAdapter.notifyDataSetChanged()
                    dismiss()
                }
            }
        }.show()
+    }
+
+    fun updatingData() {
+
     }
 
 
