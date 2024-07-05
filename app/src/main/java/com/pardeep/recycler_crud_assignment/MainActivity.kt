@@ -19,7 +19,8 @@ class MainActivity : AppCompatActivity(), RecyclerInterface {
     var data = arrayListOf<MyData>()
     var recycAdapter = MyAdapter(this,data,this)
     lateinit var linearLayoutManager: LinearLayoutManager
-    lateinit var todoDataBase: TodoDataBase
+    lateinit var dataBase: DataBase
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +32,8 @@ class MainActivity : AppCompatActivity(), RecyclerInterface {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        todoDataBase = TodoDataBase.getInstance(this)
+        dataBase = DBHandler.getDB(this)
+
         binding?.fab?.setOnClickListener {
             Dialog(this).apply {
                 setContentView(R.layout.custom_dialog)
@@ -47,7 +49,8 @@ class MainActivity : AppCompatActivity(), RecyclerInterface {
                         text2.error = "enter description"
                     }else
                     {
-                        todoDataBase.todoInterface().insertTodo()
+                        dataBase.dataDao.insertData(MyData(title = text1.text.toString(), description = text2.text.toString()))
+                        println(dataBase.dataDao.getAllData())
                         data.add(MyData(text1.text.toString(),text2.text.toString()))
                         recycAdapter.notifyDataSetChanged()
                         dismiss()
@@ -57,7 +60,7 @@ class MainActivity : AppCompatActivity(), RecyclerInterface {
         }
 
 
-        data.add(MyData("name","jalandhar"))
+        data.add(MyData(title = "name", description = "jalandhar"))
         linearLayoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         binding?.rv?.layoutManager = linearLayoutManager
         binding?.rv?.adapter = recycAdapter
@@ -88,8 +91,8 @@ class MainActivity : AppCompatActivity(), RecyclerInterface {
                    text2.error = "enter description"
                }else
                {
-                   data.set(position,MyData(text1.text.toString(),text2.text.toString()))
-                   recycAdapter.notifyDataSetChanged()
+                   //data.set(position,MyData(text1.text.toString(),text2.text.toString()))
+                   //recycAdapter.notifyDataSetChanged()
                    dismiss()
                }
            }
